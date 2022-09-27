@@ -25,6 +25,13 @@ export class ClienteService {
     return this.http.post(this.urlEndPoint, cliente,{headers: this.httpHeaders}).pipe(
       map((response: any) => response.cliente as Cliente),
       catchError(e =>{
+        if(e.status == 400){
+          return throwError(e)
+        }
+
+
+
+
         console.error(e.error.mensaje);
         swal.fire(e.error.mensaje, e.error.error, 'error');
         return throwError(e);
@@ -34,6 +41,12 @@ export class ClienteService {
   getCliente(id: number): Observable<Cliente>{
     return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
+        if(e.status == 400){
+          return throwError(e)
+        }
+
+
+
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
         swal.fire('Error al editar',e.error.mensaje,'error');
